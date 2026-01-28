@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun TelaLogin(
+    onLoginSucesso: () -> Unit,
     onCadastrarClick: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
@@ -48,11 +49,12 @@ fun TelaLogin(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = { /* ação futura */ },
+            onClick = onLoginSucesso,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Entrar")
         }
+
 
         Spacer(modifier = Modifier.height(16.dp))
 

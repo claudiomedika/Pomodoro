@@ -10,6 +10,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.seuapp.pomodoro.apresentacao.telas.estatisticas.TelaEstatisticas
+import com.seuapp.pomodoro.apresentacao.telas.login.TelaCadastro
+import com.seuapp.pomodoro.apresentacao.telas.login.TelaLogin
 import com.seuapp.pomodoro.apresentacao.telas.metas.TelaMetas
 import com.seuapp.pomodoro.apresentacao.telas.temporizador.TelaTemporizador
 
@@ -34,6 +36,8 @@ class MainActivity : ComponentActivity() {
  * Enum simples para controle de navegação sem dependências externas.
  */
 enum class TelaAtual {
+    LOGIN,
+    CADASTRO,
     TEMPORIZADOR,
     ESTATISTICAS,
     METAS
@@ -42,32 +46,61 @@ enum class TelaAtual {
 @Composable
 fun AppPomodoro() {
 
-    var telaAtual by remember { mutableStateOf(TelaAtual.TEMPORIZADOR) }
+    var usuarioLogado by remember { mutableStateOf(false) }
+    var telaAtual by remember { mutableStateOf(TelaAtual.LOGIN) }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        bottomBar = {
-            BarraNavegacao(
-                telaAtual = telaAtual,
-                onTelaSelecionada = { telaAtual = it }
+    if (!usuarioLogado) {
+
+        when (telaAtual) {
+
+            TelaAtual.LOGIN -> TelaLogin(
+                onLoginSucesso = {
+                    usuarioLogado = true
+                    telaAtual = TelaAtual.TEMPORIZADOR
+                },
+                onCadastrarClick = {
+                    telaAtual = TelaAtual.CADASTRO
+                }
             )
-        }
-    ) { paddingValues ->
 
-        // APLICAÇÃO CORRETA DO PADDING DO SCAFFOLD
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            when (telaAtual) {
-                TelaAtual.TEMPORIZADOR -> TelaTemporizador()
-                TelaAtual.ESTATISTICAS -> TelaEstatisticas()
-                TelaAtual.METAS -> TelaMetas()
+            TelaAtual.CADASTRO -> TelaCadastro(
+                onVoltarLogin = {
+                    telaAtual = TelaAtual.LOGIN
+                }
+            )
+
+            else -> {}
+        }
+
+    } else {
+
+        // A PARTIR DAQUI É O APP DE VERDADE
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            bottomBar = {
+                BarraNavegacao(
+                    telaAtual = telaAtual,
+                    onTelaSelecionada = { telaAtual = it }
+                )
+            }
+        ) { paddingValues ->
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                when (telaAtual) {
+                    TelaAtual.TEMPORIZADOR -> TelaTemporizador()
+                    TelaAtual.ESTATISTICAS -> TelaEstatisticas()
+                    TelaAtual.METAS -> TelaMetas()
+                    else -> {}
+                }
             }
         }
     }
 }
+
 
 /**
  * Barra de navegação inferior do aplicativo.
