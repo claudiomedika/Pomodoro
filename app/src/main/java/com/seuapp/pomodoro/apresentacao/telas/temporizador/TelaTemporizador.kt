@@ -8,7 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import com.seuapp.pomodoro.apresentacao.estado.EstatisticasEstado
-
+import androidx.compose.ui.platform.LocalContext
+import com.seuapp.pomodoro.utils.NotificacaoUtil
 
 @Composable
 fun TelaTemporizador() {
@@ -17,6 +18,7 @@ fun TelaTemporizador() {
     var tempoRestante by remember { mutableStateOf(tipoSessao.duracaoSegundos) }
     var rodando by remember { mutableStateOf(false) }
     var mostrarDialogo by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     // Atualiza tempo quando muda a sessão
     LaunchedEffect(tipoSessao) {
@@ -53,6 +55,12 @@ fun TelaTemporizador() {
             title = { Text("Sessão concluída 🎉") },
             text = { Text("Você concluiu a sessão de ${tipoSessao.titulo}.") }
         )
+        NotificacaoUtil.mostrarNotificacao(
+            context = context,
+            titulo = "Pomodoro concluído",
+            mensagem = "Sessão de ${tipoSessao.titulo} finalizada"
+        )
+
     }
 
     Column(

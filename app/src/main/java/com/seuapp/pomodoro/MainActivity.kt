@@ -14,6 +14,7 @@ import com.seuapp.pomodoro.apresentacao.telas.login.TelaCadastro
 import com.seuapp.pomodoro.apresentacao.telas.login.TelaLogin
 import com.seuapp.pomodoro.apresentacao.telas.metas.TelaMetas
 import com.seuapp.pomodoro.apresentacao.telas.temporizador.TelaTemporizador
+import com.seuapp.pomodoro.utils.NotificacaoUtil
 
 /**
  * Activity principal do aplicativo Pomodoro.
@@ -25,6 +26,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NotificacaoUtil.criarCanal(this)
         setContent {
             AppPomodoro()
         }
