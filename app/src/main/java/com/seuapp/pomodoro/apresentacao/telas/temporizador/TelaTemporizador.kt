@@ -7,6 +7,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import com.seuapp.pomodoro.apresentacao.estado.EstatisticasEstado
+
 
 @Composable
 fun TelaTemporizador() {
@@ -32,6 +34,11 @@ fun TelaTemporizador() {
         if (tempoRestante == 0 && rodando) {
             rodando = false
             mostrarDialogo = true
+
+            if (tipoSessao == TipoSessao.TRABALHO) {
+                EstatisticasEstado.sessoesConcluidas.value++
+                EstatisticasEstado.minutosFocados.value += 25
+            }
         }
     }
 

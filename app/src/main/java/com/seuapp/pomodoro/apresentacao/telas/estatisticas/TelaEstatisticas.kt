@@ -3,41 +3,39 @@ package com.seuapp.pomodoro.apresentacao.telas.estatisticas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.seuapp.pomodoro.apresentacao.estado.EstatisticasEstado
 
 @Composable
 fun TelaEstatisticas() {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Text(
             text = "Estatísticas",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
+            style = MaterialTheme.typography.headlineMedium
         )
 
-        ItemEstatistica("Tempo Estudado", "0 minutos")
-        ItemEstatistica("Sessões Concluídas", "0")
-        ItemEstatistica("Média por Sessão", "0 minutos")
-    }
-}
+        Spacer(modifier = Modifier.height(32.dp))
 
-@Composable
-fun ItemEstatistica(titulo: String, valor: String) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = titulo)
-            Text(
-                text = valor,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
-            )
-        }
+        Text(
+            text = "Sessões concluídas: ${EstatisticasEstado.sessoesConcluidas.value}",
+            style = MaterialTheme.typography.bodyLarge
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "Minutos focados: ${EstatisticasEstado.minutosFocados.value}",
+            style = MaterialTheme.typography.bodyLarge
+        )
     }
 }

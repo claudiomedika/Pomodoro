@@ -1,0 +1,35 @@
+[33mcommit 4289bdbee6cb5c499694ec8e7a1b3936bd653332[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m
+Author: Claudio Medika <isamedika123@gmail.com>
+Date:   Sat Jan 31 14:57:11 2026 +0100
+
+    feat(pomodoro): adiciona pausa curta e longa com controle de sessão
+
+[33mcommit 3b8d8ca6756a75aab7694da0d81e34ef1d36885f[m
+Author: Claudio Medika <isamedika123@gmail.com>
+Date:   Sat Jan 31 14:49:19 2026 +0100
+
+    feat(timer): implementa temporizador pomodoro funcional com controle de estado
+
+[33mcommit df214cbdfb43059f963191bc2adfa9875a9c4a18[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: Claudio Medika <isamedika123@gmail.com>
+Date:   Wed Jan 28 20:05:04 2026 +0100
+
+    style(ui): altera ícone do app para tema de temporizador
+
+[33mcommit acbff273a8ad3cba06ffe734cf54d7c9625644ff[m
+Author: Claudio Medika <isamedika123@gmail.com>
+Date:   Wed Jan 28 19:46:10 2026 +0100
+
+    feat(auth): implementa fluxo de login antes do acesso ao temporizador
+
+[33mcommit 2867d7f7268b143cb48c5167016dbb35f644d216[m
+Author: Claudio Medika <isamedika123@gmail.com>
+Date:   Tue Jan 27 22:49:49 2026 +0100
+
+    feat(ui): adiciona telas de login e cadastro com Jetpack Compose
+
+[33mcommit a1d3ba872581a832e67dac42bc731ddaca970c46[m
+Author: Claudio Medika <isamedika123@gmail.com>
+Date:   Mon Jan 26 11:21:11 2026 +0100
+
+    feat(ui): cria telas iniciais e navegação simples sem dependências
