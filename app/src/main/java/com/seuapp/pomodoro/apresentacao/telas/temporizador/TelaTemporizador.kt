@@ -11,59 +11,103 @@ import kotlinx.coroutines.delay
 @Composable
 fun TelaTemporizador() {
 
-    val tempoInicial = 25 * 60 // 25 minutos em segundos
-
-    var tempoRestante by remember { mutableStateOf(tempoInicial) }
+    var tipoSessao by remember { mutableStateOf(TipoSessao.TRABALHO) }
+    var tempoRestante by remember { mutableStateOf(tipoSessao.duracaoSegundos) }
     var rodando by remember { mutableStateOf(false) }
+    var mostrarDialogo by remember { mutableStateOf(false) }
 
-    // Efeito que controla o timer
+    // Atualiza tempo quando muda a sessão
+    LaunchedEffect(tipoSessao) {
+        rodando = false
+        tempoRestante = tipoSessao.duracaoSegundos
+    }
+
+    // Controle do temporizador
     LaunchedEffect(rodando) {
         while (rodando && tempoRestante > 0) {
             delay(1000L)
             tempoRestante--
         }
-        if (tempoRestante == 0) {
+
+        if (tempoRestante == 0 && rodando) {
             rodando = false
+            mostrarDialogo = true
         }
+    }
+
+    if (mostrarDialogo) {
+        AlertDialog(
+            onDismissRequest = { mostrarDialogo = false },
+            confirmButton = {
+                Button(onClick = { mostrarDialogo = false }) {
+                    Text("OK")
+                }
+            },
+            title = { Text("Sessão concluída 🎉") },
+            text = { Text("Você concluiu a sessão de ${tipoSessao.titulo}.") }
+        )
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
 
         Text(
-            text = "Temporizador Pomodoro",
+            text = tipoSessao.titulo,
             style = MaterialTheme.typography.headlineMedium
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = formatarTempo(tempoRestante),
             style = MaterialTheme.typography.displayLarge
         )
 
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Botões de sessão
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+
+            OutlinedButton(onClick = { tipoSessao = TipoSessao.TRABALHO }) {
+                Text("Trabalho")
+            }
+
+            OutlinedButton(onClick = { tipoSessao = TipoSessao.PAUSA_CURTA }) {
+                Text("Pausa Curta")
+            }
+
+            OutlinedButton(onClick = { tipoSessao = TipoSessao.PAUSA_LONGA }) {
+                Text("Pausa Longa")
+            }
+        }
+
         Spacer(modifier = Modifier.height(32.dp))
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
+        // Controles
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
 
-            Button(onClick = { rodando = true }) {
+            Button(
+                onClick = { rodando = true },
+                enabled = !rodando
+            ) {
                 Text("Iniciar")
             }
 
-            Button(onClick = { rodando = false }) {
+            Button(
+                onClick = { rodando = false },
+                enabled = rodando
+            ) {
                 Text("Pausar")
             }
 
             OutlinedButton(onClick = {
                 rodando = false
-                tempoRestante = tempoInicial
+                tempoRestante = tipoSessao.duracaoSegundos
             }) {
                 Text("Resetar")
             }
@@ -71,9 +115,6 @@ fun TelaTemporizador() {
     }
 }
 
-/**
- * Converte segundos para o formato MM:SS
- */
 fun formatarTempo(segundos: Int): String {
     val minutos = segundos / 60
     val restoSegundos = segundos % 60
