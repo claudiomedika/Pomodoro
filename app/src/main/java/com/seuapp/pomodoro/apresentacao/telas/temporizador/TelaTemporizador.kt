@@ -2,41 +2,80 @@ package com.seuapp.pomodoro.apresentacao.telas.temporizador
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 
 @Composable
 fun TelaTemporizador() {
+
+    val tempoInicial = 25 * 60 // 25 minutos em segundos
+
+    var tempoRestante by remember { mutableStateOf(tempoInicial) }
+    var rodando by remember { mutableStateOf(false) }
+
+    // Efeito que controla o timer
+    LaunchedEffect(rodando) {
+        while (rodando && tempoRestante > 0) {
+            delay(1000L)
+            tempoRestante--
+        }
+        if (tempoRestante == 0) {
+            rodando = false
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Text(
-            text = "Pomodoro",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
+            text = "Temporizador Pomodoro",
+            style = MaterialTheme.typography.headlineMedium
         )
+
+        Spacer(modifier = Modifier.height(32.dp))
 
         Text(
-            text = "25:00",
-            style = MaterialTheme.typography.displayLarge,
-            fontWeight = FontWeight.Bold
+            text = formatarTempo(tempoRestante),
+            style = MaterialTheme.typography.displayLarge
         )
 
-        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Button(onClick = { }) {
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+
+            Button(onClick = { rodando = true }) {
                 Text("Iniciar")
             }
-            Button(onClick = { }) {
-                Text("Reiniciar")
+
+            Button(onClick = { rodando = false }) {
+                Text("Pausar")
+            }
+
+            OutlinedButton(onClick = {
+                rodando = false
+                tempoRestante = tempoInicial
+            }) {
+                Text("Resetar")
             }
         }
     }
+}
+
+/**
+ * Converte segundos para o formato MM:SS
+ */
+fun formatarTempo(segundos: Int): String {
+    val minutos = segundos / 60
+    val restoSegundos = segundos % 60
+    return String.format("%02d:%02d", minutos, restoSegundos)
 }
